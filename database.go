@@ -1,6 +1,8 @@
 package main
 
 import (
+	"database/sql"
+	"errors"
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
@@ -31,4 +33,36 @@ func ConnectToDatabase() {
 	log.Println("Connected to database")
 
 	DB = db
+}
+
+func GetUserByGuid(guid string) (User, error) {
+	var user User
+
+	query := "SELECT * FROM users WHERE guid = $1"
+	err := DB.Get(&user, query, guid)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return User{}, nil
+		}
+
+		return User{}, err
+	}
+
+	return user, nil
+}
+
+func GetUserByEmail(email string) (User, error) {
+	var user User
+
+	query := "SELECT * FROM users WHERE guid = $1"
+	err := DB.Get(&user, query, email)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return User{}, nil
+		}
+
+		return User{}, err
+	}
+
+	return user, nil
 }
