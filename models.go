@@ -2,7 +2,6 @@ package main
 
 type User struct {
 	Guid               string `json:"guid" db:"guid"`
-	Name               string `json:"name" db:"name"`
 	Email              string `json:"email" db:"email"`
 	HashedPassword     string `json:"hashed_password" db:"hashed_password"`
 	LastIP             string `json:"last_ip" db:"last_ip"`
@@ -11,7 +10,6 @@ type User struct {
 
 var UserSchema = `
 	guid VARCHAR(36) PRIMARY KEY,
-	name TEXT NOT NULL,
 	email TEXT NOT NULL,
 	hashed_password TEXT NOT NULL,
 	last_ip VARCHAR(45) NOT NULL,
