@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
@@ -13,7 +14,7 @@ func main() {
 		w.Write([]byte("Hello World!"))
 	})
 
-	err := http.ListenAndServe(":3000", nil)
+	err := http.ListenAndServe(":"+os.Getenv("LOCALHOST_PORT"), nil)
 	if err != nil {
 		log.Fatal(err)
 	}
