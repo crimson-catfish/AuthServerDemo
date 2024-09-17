@@ -14,7 +14,7 @@ var DB *sqlx.DB
 
 func ConnectToDatabase() {
 	connectStr := fmt.Sprintf(
-		"host=db user=%s password=%s dbname=%s sslmode=disable",
+		"host=DB user=%s password=%s dbname=%s sslmode=disable",
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_NAME"),
@@ -65,4 +65,15 @@ func GetUserByEmail(email string) (User, error) {
 	}
 
 	return user, nil
+}
+
+func AddUser(user User) error {
+	query := "INSERT INTO users (guid, email, hashed_password, last_ip, hashed_refresh_token) VALUES ($1, $2, $3, $4, $5)"
+
+	_, err := DB.Exec(query, user.Guid, user.Email, user.HashedPassword, user.LastIP, user.HashedRefreshToken)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
