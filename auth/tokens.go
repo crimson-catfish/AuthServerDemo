@@ -9,19 +9,19 @@ import (
 )
 
 const (
-	jwtExpirationTimeMinuets       = 15
+	jwtExpirationTimeMinuets       = 1
 	RefreshTokenExpirationTimeDays = 30
 	refreshTokenLength             = 32
 )
 
-type claim struct {
+type AccessTokenClaims struct {
 	IP string
 	jwt.StandardClaims
 }
 
 func GenerateTokens(guid, clientIP string) (string, string, error) {
 	expirationTime := time.Now().Add(jwtExpirationTimeMinuets * time.Minute)
-	clm := &claim{
+	clm := &AccessTokenClaims{
 		IP: clientIP,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
