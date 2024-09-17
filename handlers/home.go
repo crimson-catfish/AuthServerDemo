@@ -4,7 +4,6 @@ import (
 	"TestTask/auth"
 	"encoding/json"
 	"github.com/golang-jwt/jwt"
-	"log"
 	"net/http"
 	"os"
 )
@@ -20,8 +19,6 @@ func HandleHome(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-
-	log.Println(homeCred.AccessToken)
 
 	claims := auth.AccessTokenClaims{}
 	_, err = jwt.ParseWithClaims(homeCred.AccessToken, &claims, func(token *jwt.Token) (interface{}, error) {
