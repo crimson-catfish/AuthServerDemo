@@ -8,6 +8,11 @@ import (
 	"time"
 )
 
+const (
+	jwtExpirationTimeMinuets = 3
+	refreshTokenLength       = 32
+)
+
 type claim struct {
 	IP string
 	jwt.StandardClaims
