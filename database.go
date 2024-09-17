@@ -54,7 +54,7 @@ func GetUserByGuid(guid string) (User, error) {
 func GetUserByEmail(email string) (User, error) {
 	var user User
 
-	query := "SELECT * FROM users WHERE guid = $1"
+	query := "SELECT * FROM users WHERE email = $1"
 	err := DB.Get(&user, query, email)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
