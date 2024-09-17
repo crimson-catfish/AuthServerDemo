@@ -4,7 +4,6 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"github.com/golang-jwt/jwt"
-	"log"
 	"os"
 	"time"
 )
@@ -25,14 +24,10 @@ func GenerateTokens(guid, clientIP string) (string, string, error) {
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, clm)
 
-	log.Println(token)
-
 	accessToken, err := token.SignedString([]byte(os.Getenv("SECRET_KEY")))
 	if err != nil {
 		return "", "", err
 	}
-
-	log.Println(accessToken)
 
 	bytes := make([]byte, refreshTokenLength)
 	_, err = rand.Read(bytes)
