@@ -53,7 +53,7 @@ func HandleRefresh(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if usr.LastIP != claims.IP {
-		//usr.Email.SendMessage("email warning: ip mismatch")
+		SendMessage(usr.Email, "email warning: ip mismatch")
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(usr.HashedRefreshToken), []byte(refreshCred.RefreshToken))
@@ -94,4 +94,9 @@ func HandleRefresh(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
+}
+
+// Mock function
+func SendMessage(email string, s string) {
+	// send email
 }
