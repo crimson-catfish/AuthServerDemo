@@ -1,9 +1,13 @@
-package main
+package handlers
 
 import (
+	"TestTask/auth"
+	"TestTask/database"
+	"TestTask/models"
 	"encoding/json"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
+	"time"
 )
 
 type registerCredentials struct {
@@ -25,27 +29,27 @@ func HandleRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	usr, err := GetUserByGuid(regCred.Guid)
+	usr, err := database.GetUserByGuid(regCred.Guid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if usr != (User{}) {
+	if usr != (models.User{}) {
 		http.Error(w, "User with such guid already exists", http.StatusConflict)
 		return
 	}
 
-	usr, err = GetUserByEmail(regCred.Email)
+	usr, err = database.GetUserByEmail(regCred.Email)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if usr != (User{}) {
+	if usr != (models.User{}) {
 		http.Error(w, "User with such email already exists", http.StatusConflict)
 		return
 	}
 
-	access, refresh, err := GenerateTokens(usr.Guid, r.RemoteAddr)
+	access, refresh, err := auth.GenerateTokens(usr.Guid, r.RemoteAddr)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -61,17 +65,21 @@ func HandleRegister(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	usr = User{
-		Guid:               regCred.Guid,
-		Email:              regCred.Email,
-		HashedPassword:     string(hashedPass),
-		LastIP:             r.RemoteAddr,
-		HashedRefreshToken: string(hashedRefresh),
+	expirationTime := time.Now().Add(auth.RefreshTokenExpirationTimeDays * time.Hour * 24)
+
+	usr = models.User{
+		Guid:                  regCred.Guid,
+		Email:                 regCred.Email,
+		HashedPassword:        string(hashedPass),
+		LastIP:                r.RemoteAddr,
+		HashedRefreshToken:    string(hashedRefresh),
+		RefreshTokenExpiresAt: expirationTime.Unix(),
 	}
 
-	err = AddUser(usr)
+	err = database.AddUser(usr)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	response := registerResponse{

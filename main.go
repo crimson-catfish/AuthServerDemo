@@ -1,15 +1,18 @@
 package main
 
 import (
+	"TestTask/database"
+	"TestTask/handlers"
 	"log"
 	"net/http"
 	"os"
 )
 
 func main() {
-	ConnectToDatabase()
+	database.ConnectToDatabase()
 
-	http.HandleFunc("/register", HandleRegister)
+	http.HandleFunc("/register", handlers.HandleRegister)
+	http.HandleFunc("/login", handlers.HandleLogin)
 
 	err := http.ListenAndServe(":"+os.Getenv("LOCALHOST_PORT"), nil)
 	if err != nil {

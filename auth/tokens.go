@@ -1,4 +1,4 @@
-package main
+package auth
 
 import (
 	"crypto/rand"
@@ -9,8 +9,9 @@ import (
 )
 
 const (
-	jwtExpirationTimeMinuets = 3
-	refreshTokenLength       = 32
+	jwtExpirationTimeMinuets       = 15
+	RefreshTokenExpirationTimeDays = 30
+	refreshTokenLength             = 32
 )
 
 type claim struct {
