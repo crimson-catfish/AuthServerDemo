@@ -25,3 +25,5 @@ go.work.sum
 .env
 /TestTask
 /.directory
+/.idea/sqldialects.xml
+/.idea/dataSources.xml
