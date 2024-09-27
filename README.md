@@ -1,4 +1,11 @@
-# Сервер с аутентификацией по access и refresh токенам. 
+# Сервер с аутентификацией по access и refresh токенам
+
+## Использованные технологии
+* **Docker** для удобной развертки на любой системе
+* **JWT** для авторизации пользователей
+* **Postgresql** в качестве базы данных
+* **sqlx** для подключения к базе данных
+
 ## Порядок установки
 1. `git clone github.com/crimson-catfish/MEDODS-TestTask <destination-directory>`
 2. `cd <destination-directory>`
